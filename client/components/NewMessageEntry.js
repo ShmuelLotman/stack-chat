@@ -20,8 +20,9 @@ export default class NewMessageEntry extends Component {
     evt.preventDefault();
     const content = this.state.newMessageEntry;
     const channelId = this.props.channelId;
-    const nameEntry = this.state.nameEntry
-    const thunk = postMessage(content, nameEntry)
+    const nameEntry = this.state.nameEntry;
+    console.log('the name entry: ',content)
+    const thunk = postMessage({content, channelId, nameEntry})
     store.dispatch(thunk)
   }
   handleChange (event) {

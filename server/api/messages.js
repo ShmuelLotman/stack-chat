@@ -18,7 +18,7 @@ router.post('/', function (req, res, next) {
   // Of course, you wouldn't want to do this in a real chat app!
   Author.findOrCreate({
     where: {
-      name: req.body.name || 'Cody'
+      name: req.body.nameEntry || 'Cody'
     }
   })
   .spread(author => {

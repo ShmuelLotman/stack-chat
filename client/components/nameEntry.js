@@ -41,6 +41,7 @@ export default class NameEntry extends Component {
         onChange={ this.handleChange }
         placeholder="Enter your name"
         className="form-control"
+        value={ this.state.nameEntry }
       />
     </form>
     );
