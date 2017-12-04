@@ -23,7 +23,9 @@
 // export default store
 
 
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import loggerMiddleware from 'redux-logger'
+
 
 // ACTION TYPES
 const GOT_MESSAGES_FROM_SERVER = 'GOT_MESSAGES_FROM_SERVER';
@@ -72,7 +74,7 @@ function reducer(state = initialState, action) {
        return state;
   }
 }
-
+const middleware = applyMiddleware(loggerMiddleware);
 // STORE
-const store = createStore(reducer);
+const store = createStore(reducer, middleware);
 export default store;
