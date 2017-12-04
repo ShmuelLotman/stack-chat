@@ -63,7 +63,11 @@ const initialState = {
 function reducer(state = initialState, action) {
   switch (action.type) {
     case GOT_MESSAGES_FROM_SERVER:
-       return Object.assign({}, state, { messages: action.messages });
+      return Object.assign({}, state, { messages: action.messages });
+    case WRITE_MESSAGE:
+      return Object.assign({}, state, {newMessageEntry: action.newMessageEntry})
+    case GOT_NEW_MESSAGE_FROM_SERVER:
+      return Object.assign({}, state, { messages: state.messages.concat(action.message) });
     default:
        return state;
   }
