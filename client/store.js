@@ -22,7 +22,7 @@ const initialState = {
 const messagesReducer = (prevState = initialState, action) => {
     switch(action.type) {
         case GOT_MESSAGES_FROM_SERVER:
-        return {...prevState, messages: action.messages};
+        return {...prevState, messages: [...prevState.messages, ...action.messages]};
 
         case NEW_MESSAGE_WRITTEN: 
         return{...prevState, newMessageEntry: action.newMessage};
@@ -34,5 +34,8 @@ const messagesReducer = (prevState = initialState, action) => {
     }
 }
 
-const store = createStore(messagesReducer)
+const store = createStore(
+    messagesReducer, 
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 export default store;
