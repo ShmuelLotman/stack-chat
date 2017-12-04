@@ -27,6 +27,8 @@ import { createStore } from 'redux';
 
 // ACTION TYPES
 const GOT_MESSAGES_FROM_SERVER = 'GOT_MESSAGES_FROM_SERVER';
+const WRITE_MESSAGE = 'WRITE_MESSAGE';
+const GOT_NEW_MESSAGE_FROM_SERVER = 'GOT_NEW_MESSAGE_FROM_SERVER';
 
 // ACTION CREATORS
 export function gotMessagesFromServer(messages) {
@@ -36,9 +38,25 @@ export function gotMessagesFromServer(messages) {
   };
 }
 
+export function writeMessage(input) {
+  return {
+    type: WRITE_MESSAGE,
+    newMessageEntry: input
+  };
+}
+
+export function gotNewMessageFromServer(message) {
+  return {
+    type: GOT_NEW_MESSAGE_FROM_SERVER,
+    message
+    // or message: message
+  };
+}
+
 // INITIAL STATE
 const initialState = {
-  messages: []
+  messages: [],
+  newMessageEntry: ''
 };
 
 // REDUCER
