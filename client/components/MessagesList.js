@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import Message from './Message';
 import NewMessageEntry from './NewMessageEntry';
 import axios from 'axios';
-import store, {gotMessagesFromServer} from '../store';
+import store, {gotMessagesFromServer, fetchMessages} from '../store';
+
 export default class MessagesList extends Component {
 
   constructor () {
@@ -11,12 +12,8 @@ export default class MessagesList extends Component {
   }
 
   componentDidMount () {
-    axios.get('/api/messages')
-      .then(res => res.data)
-      .then(messages => {
-        const action = gotMessagesFromServer(messages);
-        store.dispatch(action)
-      });
+      const thunkGet = fetchMessages()
+      store.dispatch(thunkGet)
       this.unsubscribe = store.subscribe(() => this.setState(store.getState()))
   }
 

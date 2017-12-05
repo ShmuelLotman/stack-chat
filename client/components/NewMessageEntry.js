@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import store, {newMessageWritten, newMessageReceived, gotMessagesFromServer} from '../store';
+import store, {newMessageWritten, newMessageReceived, gotMessagesFromServer, postMessages} from '../store';
 import axios from 'axios';
 import socket from '../socket';
 export default class NewMessageEntry extends Component {
@@ -22,13 +22,11 @@ handleChange(event) {
 handleSubmit(event) {
   event.preventDefault();
   const content = this.state.newMessageEntry;
+  const name = this.state.submittedName;
+  const message = { content: content, channelId: this.props.channel, name: name}
+  const thunkPost = postMessages(message);
+  store.dispatch(thunkPost);
   
-  axios.post('/api/messages', { content: content, channelId: this.props.channel })
-  .then(res => res.data)
-  .then(message => {
-    store.dispatch(newMessageReceived(message))
-    socket.emit('new-message', message);
-  });
 }
   render () {
     console.log(this.props)
