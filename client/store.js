@@ -11,6 +11,18 @@ const NEW_MESSAGE_RECEIVED = 'NEW_MESSAGE_RECEIVED';
 const NEW_NAME_SUBMITTED = 'NEW_NAME_SUBMITTED';
 const GOT_CHANNELS = 'GOT_CHANNELS';
 
+const NEW_CHANNEL_WRITTEN = 'NEW_CHANNEL_WRITTEN';
+const NEW_CHANNEL_RECEIVED = 'NEW_CHANNEL_RECEIVED'
+
+export const newChannelWritten = (newChannel) => ({
+  type: NEW_CHANNEL_WRITTEN,
+  newChannel
+})
+export const newChannelReceived = (newChannel) => ({
+  type: NEW_CHANNEL_RECEIVED,
+  received
+})
+
 export const gotMessagesFromServer = (messages) => ({
     type: GOT_MESSAGES_FROM_SERVER,
     messages
@@ -27,9 +39,9 @@ export const newNameSubmitted = (name) => ({
     type: NEW_NAME_SUBMITTED,
     name
 })
-export const gotChannels = (channels) => ({
+export const gotChannels = (channelsList) => ({
     type: GOT_CHANNELS,
-    channels
+    channelsList
 })
 export const fetchMessages = () => {
 
@@ -53,6 +65,17 @@ export const postMessages = (message) => {
         });
     }
 }
+export const postChannels = (channel) => {
+  return function thunk(dispatch) {
+    return axios.post('/api/channels', channel)
+      .then(res => res.data)
+      .then(channel => {
+        const action = newChannelReceived(channel)
+        dispatch(action)
+        socket.emit('new-channel', channel);
+      });
+  }
+}
 export const fetchChannels = () => {
     return function thunk(dispatch) {
         return axios.get('/api/channels')
@@ -66,6 +89,7 @@ export const fetchChannels = () => {
 const initialState = {
     messages: [],
     newMessageEntry: '',
+    newChannelEntry: '',
     submittedName: '',
     channelsList: []
 }
@@ -74,18 +98,24 @@ const messagesReducer = (prevState = initialState, action) => {
         case GOT_MESSAGES_FROM_SERVER:
         return {...prevState, messages: [...prevState.messages, ...action.messages]};
 
-        case NEW_MESSAGE_WRITTEN: 
+        case NEW_MESSAGE_WRITTEN:
         return{...prevState, newMessageEntry: action.newMessage};
 
         case NEW_MESSAGE_RECEIVED:
         return {...prevState, messages: [...prevState.messages, action.received]};
 
+        case NEW_CHANNEL_WRITTEN:
+        return {...prevState, channelsList: [...prevState.channelsList, action.newChannel]}
+
+        case NEW_CHANNEL_RECEIVED:
+        return {...prevState, channelsList: [...prevState.channelsList, action.received]}
+
         case NEW_NAME_SUBMITTED:
         return {...prevState, submittedName: action.name};
 
-        case GOT_CHANNELS: 
-        return {...prevState, channelsList: [...prevState.channels, ...action.channels]}
-        default: 
+        case GOT_CHANNELS:
+        return {...prevState, channelsList: [...prevState.channelsList, ...action.channelsList]}
+        default:
         return prevState;
     }
 }

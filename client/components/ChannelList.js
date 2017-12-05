@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import store from '../store';
+import NewChannelEntry from './NewChannelEntry'
 // These values are all hardcoded...for now!
 // Soon, we'll fetch them from the server!
 const RANDOM_CHANNEL = '/channels/1';
@@ -49,6 +50,9 @@ export default class ChannelList extends Component {
             <span># lunch_planning</span>
             <span className="badge">{messages.filter(a => a.channelId === 4).length}</span>
           </NavLink>
+        </li>
+        <li>
+          <NewChannelEntry />
         </li>
       </ul>
     );

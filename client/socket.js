@@ -13,6 +13,12 @@ socket.on('connect', () => {
     console.log('client side', message);
     store.dispatch(newMessageReceived(message));
   });
+
+  socket.on('new-channel', (channel) => {
+    console.log('client side', channel);
+    store.dispatch(newChannelReceived(channel));
+  });
+
 });
 
 export default socket;
